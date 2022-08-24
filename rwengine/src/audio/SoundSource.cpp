@@ -121,7 +121,11 @@ bool SoundSource::findAudioStream(const std::filesystem::path& filePath) {
     }
 
     audioStream = formatContext->streams[streamIndex];
-    codec = avcodec_find_decoder(audioStream->codecpar->codec_id);
+#if LIBAVCODEC_VERSION_MAJOR < 59
+    AVCodec* codec = avcodec_find_decoder(audioStream->codecpar->codec_id);
+#else
+    const AVCodec* codec = avcodec_find_decoder(audioStream->codecpar->codec_id);
+#endif
     return true;
 }
 
@@ -148,7 +152,11 @@ bool SoundSource::findAudioStreamSfx() {
     }
 
     audioStream = formatContext->streams[streamIndex];
-    codec = avcodec_find_decoder(audioStream->codecpar->codec_id);
+#if LIBAVCODEC_VERSION_MAJOR < 59
+    AVCodec* codec = avcodec_find_decoder(audioStream->codecpar->codec_id);
+#else
+    const AVCodec* codec = avcodec_find_decoder(audioStream->codecpar->codec_id);
+#endif
 
     return true;
 }
